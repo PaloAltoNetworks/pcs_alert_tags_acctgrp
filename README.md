@@ -36,8 +36,10 @@ This script will create a csv file that contains all the data from the alert CSV
 
 4. You can also set the time range for the data that is pulled by setting the following(in runner.py at the top):
 
-    ```'timerange_unit': 'month', # day, week, month, hour```
-    ```'timerange_amount': 1```
+    ```
+    'timerange_unit': 'month', # day, week, month, hour
+    'timerange_amount': 1
+    ```
     
 
 ### Run
