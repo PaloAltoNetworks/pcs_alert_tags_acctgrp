@@ -65,6 +65,7 @@ class AlertExport():
         blank = '' #needed to handle cases where we don't have data for specific fields in the CSV (only handling open alerts)
         data = json.dumps({
             'detailed': False,
+            'filters': [{'name': 'alert.status', 'value': 'open', 'operator': 'open'}],
             'timeRange': {
                 'type': 'relative',
                 'value': {
