@@ -1,0 +1,5 @@
+prisma_cloud: 
+  username:  
+  password: 
+  customer_name: #optional - only needed if accessing multiple tenants 
+  api_base: api.prismacloud.io #default value
