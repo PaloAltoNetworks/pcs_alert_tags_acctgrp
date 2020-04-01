@@ -98,9 +98,9 @@ class AlertExport():
                 eventOccurred_date = 'NA'
             else:
                 eventOccurred_date = datetime.datetime.fromtimestamp(alert['eventOccurred']/1000.).strftime('%Y-%m-%d %H:%M:%S')
-            csvdata = [alert["id"], stored_policy["name"], stored_policy["policyType"], stored_policy["description"], 
-                    str(stored_policy["labels"])[1:-1], stored_policy["severity"], alert["resource"]["name"], alert["resource"]["cloudType"], 
-                    alert["resource"]["accountId"], acctname, alert["resource"]["region"], stored_policy["recommendation"],
+            csvdata = [alert["id"], stored_policy.get("name","NA"), stored_policy.get("policyType","NA"), stored_policy.get("description","NA"), 
+                    str(stored_policy.get("labels")," NA ")[1:-1], stored_policy.get("severity","NA"), alert["resource"]["name"], alert["resource"]["cloudType"], 
+                    alert["resource"]["accountId"], acctname, alert["resource"]["region"], stored_policy.get("recommendation","NA"),
                     alert["status"], alert["riskDetail"]["rating"], datetime.datetime.fromtimestamp(alert["alertTime"]/1000.).strftime('%Y-%m-%d %H:%M:%S'),
                     eventOccurred_date, blank, blank, blank, blank, blank, alert["resource"]["id"], str(tags_data)[1:-1], str(acctgrp_names)[1:-1]] 
                         
