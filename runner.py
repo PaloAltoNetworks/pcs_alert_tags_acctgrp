@@ -61,7 +61,9 @@ class AlertExport():
 
     def getalerts(self):
         cloud_accounts = self.get_cloud_accts()
+        print("Pulling all Cloud Accounts")
         policies = self.get_policies()
+        print("Pulling all Policies")
         blank = '' #needed to handle cases where we don't have data for specific fields in the CSV (only handling open alerts)
         data = json.dumps({
             'detailed': False,
@@ -78,6 +80,7 @@ class AlertExport():
         self.rl_sess.authenticate_client()
         alerts = self.rl_sess.client.post(self.url,data)
         alerts_json = alerts.json()
+        print("Pulling all Alert data")
         for alert in alerts_json['items']:
             acctgrp_names = [] #this is here to clear out the list on each loop to ensure we capture the correct set of account group names for each alert
             stored_policy = {}
@@ -98,8 +101,16 @@ class AlertExport():
                 eventOccurred_date = 'NA'
             else:
                 eventOccurred_date = datetime.datetime.fromtimestamp(alert['eventOccurred']/1000.).strftime('%Y-%m-%d %H:%M:%S')
+            #### convert policy data into data without brackets and single quotes
+            #### this also handles issue if policy isn't available for an alert
+            s = ", "
+            labels = stored_policy.get("labels","NA")
+            if labels != "NA":
+                labels = s.join(labels)
+
+
             csvdata = [alert["id"], stored_policy.get("name","NA"), stored_policy.get("policyType","NA"), stored_policy.get("description","NA"), 
-                    str(stored_policy.get("labels")," NA ")[1:-1], stored_policy.get("severity","NA"), alert["resource"]["name"], alert["resource"]["cloudType"], 
+                    labels, stored_policy.get("severity","NA"), alert["resource"]["name"], alert["resource"]["cloudType"], 
                     alert["resource"]["accountId"], acctname, alert["resource"]["region"], stored_policy.get("recommendation","NA"),
                     alert["status"], alert["riskDetail"]["rating"], datetime.datetime.fromtimestamp(alert["alertTime"]/1000.).strftime('%Y-%m-%d %H:%M:%S'),
                     eventOccurred_date, blank, blank, blank, blank, blank, alert["resource"]["id"], str(tags_data)[1:-1], str(acctgrp_names)[1:-1]] 
